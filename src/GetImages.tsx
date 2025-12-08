@@ -10,56 +10,58 @@ interface UnsplashImage {
 }
 
 function GetImages() {
-    const [images, setImages] = useState<UnsplashImage[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+  const [images, setImages] = useState<UnsplashImage[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchImages = async () => {
-            try {
-                const clientId = import.meta.env.VITE_UNSPLASH_CLIENT_ID;
-                
-                if (!clientId) {
-                    throw new Error("No existe una api Key configurada en el .env");
-                }
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const clientId = import.meta.env.VITE_UNSPLASH_CLIENT_ID;
 
-                const url = `https://api.unsplash.com/photos/?client_id=${clientId}`;
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status}`);
-                }
-                
-                const data: UnsplashImage[] = await response.json();
-                setImages(data);
-                
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Error desconocido');
-            } finally {
-                setLoading(false);
-            }
-        };
+        if (!clientId) {
+          throw new Error("No existe una api Key configurada en el .env");
+        }
 
-        fetchImages();
-    }, []);
+        const url = `https://api.unsplash.com/photos?per_page=30&client_id=${clientId}`;
+        const response = await fetch(url);
 
-    // Estados
-    if (loading)
-        return <p>Cargando...</p>;
-    if (error)
-        return <p>Error: {error}</p>;
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
 
-    return (
-        <div>
-            {images.map((image) => (
-                <img 
-                    key={image.id} 
-                    src={image.urls.small} 
-                    alt={image.alt_description || 'Imagen'} 
-                />
-            ))}
-        </div>
-    );
+        const data: UnsplashImage[] = await response.json();
+        setImages(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error desconocido");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  if (loading)
+    return <p className="text-slate-200">Cargando...</p>;
+  if (error)
+    return <p>Error: {error}</p>;
+
+  return (
+    <div className="px-4 py-4">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {images.map((image) => (
+          <article key={image.id} className="overflow-hidden rounded-lg">
+            <img
+              src={image.urls.small}
+              alt={image.alt_description || "Imagen"}
+              className="w-full h-48 object-cover"
+            />
+          </article>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default GetImages;
