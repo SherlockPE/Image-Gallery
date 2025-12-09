@@ -7,10 +7,13 @@ function App() {
 
   return (
     <>
-      {/* <Nav />
-      <Hero /> */}
-      <h1>Image Gallery</h1>
-      <GetImages />
+      <div >
+        <h1 className='flex justify-center'>Image Gallery</h1>
+
+      </div>
+      <div className='w-screen flex justify-center items-center'>
+        <GetImages/>
+      </div>
     </>
   )
 }

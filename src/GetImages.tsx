@@ -48,19 +48,17 @@ function GetImages() {
     return <p>Error: {error}</p>;
 
   return (
-    <div className="px-4 py-4">
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section className="columns-3">
         {images.map((image) => (
-          <article key={image.id} className="overflow-hidden rounded-lg">
+          <article key={image.id} className="mb-4 rounded-4xl">
             <img
               src={image.urls.small}
               alt={image.alt_description || "Imagen"}
-              className="w-full h-48 object-cover"
-            />
+              className=""
+              />
           </article>
         ))}
-      </div>
-    </div>
+      </section>
   );
 }
 
